@@ -6,31 +6,32 @@ from helpers.hashing import password_compare
 
 class Tx:
   def add_transaction(self, sender, receiver, amount):
-    account_password = sender[1]
-    sender = sender[0]
-    db = connect_to_db_accounts()
-    db_password = db.find_one({"username": sender})
-    print(account_password)
-    db_password = db_password['password']
-    if password_compare(account_password, db_password):
-      balance = get_balance(sender)
-      liquidity = balance >= amount
-      if liquidity:
-        self.remove_liquidity(sender, balance, amount)
-        transaction = {
-          "sender": sender,
-          "receiver": receiver,
-          "amount": amount
-        }
-        self.insert_transaction(transaction)
+    if sender != "MINING":
+      account_password = sender[1]
+      sender = sender[0]
+      db = connect_to_db_accounts()
+      db_password = db.find_one({"username": sender})
+      db_password = db_password['password']
+      if password_compare(account_password, db_password):
+        balance = get_balance(sender)
+        liquidity = balance >= amount
+        if liquidity:
+          self.remove_liquidity(sender, balance, amount)
+          transaction = {
+            "sender": sender,
+            "receiver": receiver,
+            "amount": amount
+          }
+          self.insert_transaction(transaction)
+        else:
+          print('Not enough credit')
       else:
-        print('Wrong password')
+          print('Wrong password')
 
   
   def remove_liquidity(self, sender, balance, amount):
     db = connect_to_db_accounts()
     new_balance = balance - amount
-    print(new_balance)
     db.update({
       "username": sender
     }, { 
@@ -52,9 +53,6 @@ class Tx:
     print('transaction added')
   
   
-  def validate_transactions(self):
-    pass
-
   
 tx = Tx()
 tx.add_transaction(["markgagnon", "root"], 'marie', 3)

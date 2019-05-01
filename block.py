@@ -19,7 +19,8 @@ class Block:
       "timestamp": timestamp,
       "transactions": transactions,
       "difficulty": difficulty,
-      "proof_of_work": proof,
+      "hash": proof['hash'],
+      "proof_of_work": proof['pof'],
       "last_timestamp": blockchain[-1]['last_timestamp'],
       "last_difficulty": blockchain[-1]['last_difficulty'],
       "previous_hash": blockchain[-1]['previous_hash']
@@ -31,8 +32,10 @@ class Block:
       pof['proof'] += 1
       pof = proof(timestamp, transactions, pof)
     transactions.Tx.add_transaction('MINING', current_wallet, MINING_REWARD)
-    return pof['proof']
-
+    return {
+      "hash": pof['hash'],
+      "pof": pof['proof']
+    }
 
 blockchain = [{
   "index": 0,

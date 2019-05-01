@@ -35,9 +35,3 @@ class Wallet():
 wallet = Wallet()
 wallet.load_wallet('markgagnon', 'root')
 print(get_balance('markgagnon'))
-
-
-
-
-
-

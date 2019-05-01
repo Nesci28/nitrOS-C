@@ -7,9 +7,16 @@
 - [ ] verify each block
 
 ### block
-- [O] validate transation
+- [ ] validate transation
 - [X] add transactions
 - [X] mine a block
+
+### transaction
+- [X] transaction between 2 people
+  - [X] debit the amount from the sender
+- [ ] transaction for the block founder
+  - [ ] 50% to the founder
+  - [ ] 50% divided pro-rata to the other miners
 
 ### wallet
 - [X] create a wallet
@@ -23,17 +30,27 @@
 - [ ] post the new node address 
 
 
-## helper
+## helpers
 #### hashing
 - [X] encode keys
 - [X] decode keys
 - [X] bcrypt the password
+- [X] compare the password with bcrypt
 - [X] hash the block
 
-#### proof-of-work
+#### mining
 - [X] decide the difficulty
   - [X] check the difference between last timestamp and timestamp
+    - [X] if the difference is less than 4 minutes, increase the difficulty
+    - [X] if the difference is more than 6 minutes, decrease the difficulty
 - [X] do the work
+
+#### get_info
+- [X] get the user balance
+
+#### db
+- [X] connect to the blockchain db
+- [X] connect to the user accounts db
 
 ```json
 "block": {
@@ -48,6 +65,7 @@
     }
   ],
   "proof": 324984774000,
+  "hash": "734fgdba5fb0aw2346e83234f5b9efwe1b161e5c1fa7425e7304336290495676",
   "previous_hash": "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824"
 }
 ```
