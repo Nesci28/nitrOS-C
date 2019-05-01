@@ -7,9 +7,9 @@
 - [ ] verify each block
 
 ### block
-- [ ] validate transation
-- [ ] add transactions
-- [ ] mine a block
+- [O] validate transation
+- [X] add transactions
+- [X] mine a block
 
 ### wallet
 - [X] create a wallet
@@ -28,13 +28,12 @@
 - [X] encode keys
 - [X] decode keys
 - [X] bcrypt the password
-- [ ] hash the block
+- [X] hash the block
 
 #### proof-of-work
-- [ ] put the transactions list in order
-- [ ] decide the difficulty
-  - [ ] check the difference between last timestamp and timestamp
-- [ ] do the work
+- [X] decide the difficulty
+  - [X] check the difference between last timestamp and timestamp
+- [X] do the work
 
 ```json
 "block": {
