@@ -1,19 +1,32 @@
 from bson import ObjectId
 import time
 
-from helpers.db import connect_to_db_blockchain
+from helpers.db import connect_to_db_blockchain, connect_to_db_accounts
 
 class Blockchain:
   def __init__(self):
-    db = connect_to_db_blockchain()
-    self.blockchain = db.find_one({"_id": ObjectId("5cc8ec4efb6fc00ed59ea5fd")})
-    print(blockchain)
+    self.db = connect_to_db_blockchain()
+    self.blockchain = self.db.find_one({"_id": ObjectId("5cc8ec4efb6fc00ed59ea5fd")})
     if len(self.blockchain['block']) == 0:
-      self.genesis_block()
+      self.add_block(self.genesis_block())
 
 
   def __repr__(self):
     return 'Number of blocks: ' + str(len(self.blockchain['block']))
+
+
+  def add_block(self, block):
+    self.db.find_one_and_update({
+      "_id": ObjectId("5cc8ec4efb6fc00ed59ea5fd")
+      }, {
+      '$push': {
+        'block': block
+      }
+    })
+    if block['hash'] == "GENESIS":
+      print('Genesis block added to the blockchain')
+    else:
+      print('Block : "{}" added to the blockchain\nHash: "{}"'.format(block['index'], block['hash']))
 
 
   def genesis_block(self):
@@ -21,14 +34,52 @@ class Blockchain:
       "index": 0,
       "timestamp": int(round(time.time() * 1000)),
       "transactions": [],
-      "proof": "GENESIS",
+      "difficulty": 4,
       "hash": "GENESIS",
-      "last timestamp": "GENESIS",
+      "proof": 100,
+      "last_timestamp": "GENESIS",
+      "last_difficulty": "GENESIS",
       "previous_hash": "GENESIS"
     }
-    
+    return block
 
 
+  def hack_blockchain(self):
+    self.db.find_one_and_update({
+      "_id": ObjectId("5cc8ec4efb6fc00ed59ea5fd")
+      }, {
+      '$set': {
+        'block': []
+      }
+    })
+    print('Blockchain deleted')
 
-blockchain = Blockchain()
-print(blockchain)
+
+  def hack_transactions(self):
+    self.db.find_one_and_update({
+      "_id": ObjectId("5cc8e412fb6fc00ed59ea3bb")
+      }, {
+      '$set': {
+        'open_transactions': []
+      }
+    })
+    print('Open transactions deleted')
+
+
+  def hack_nodes(self):
+    self.db.find_one_and_update({
+      "_id": ObjectId("5cc9c967e7179a596b194ca1")
+      }, {
+      '$set': {
+        'nodes': []
+      }
+    })
+    print('nodes deleted')
+
+
+if __name__ == "__main__":
+  Blockchain().hack_transactions()
+  Blockchain().hack_nodes()
+  Blockchain().hack_blockchain()
+
+

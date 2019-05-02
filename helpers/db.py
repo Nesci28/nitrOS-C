@@ -7,6 +7,7 @@ from pathlib import Path
 env_path = Path('.') / '.env'
 load_dotenv(dotenv_path=env_path)
 
+
 def connect_to_db_accounts():
   DB_USERNAME = os.getenv("DB_USERNAME")
   DB_PASSWORD = os.getenv("DB_PASSWORD")

@@ -6,6 +6,9 @@ import base64
 
 
 def password_compare(account_password, db_password):
+  """Compare plain pass. to encrypted pass. (2 args)\n
+    plain password, encrypted password
+  """
   if bcrypt.checkpw(account_password.encode(), db_password.encode()):
     return True
   else:

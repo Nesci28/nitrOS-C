@@ -1,4 +1,7 @@
 import hashlib
+from bson import ObjectId
+
+from helpers.db import connect_to_db_blockchain
 
 def proof(timestamp, transactions, pof):
   block = str(timestamp).encode('utf8') + str(transactions).encode('utf8') + str(pof['proof']).encode('utf8')
@@ -9,10 +12,31 @@ def proof(timestamp, transactions, pof):
   return {"success": False, "proof": pof['proof'], "difficulty": pof['difficulty'], "hash": hashed}
 
 
-def calculate_difficulty(blockchain, timestamp):
-  time_block = timestamp - blockchain[-1]['last_timestamp']
-  if time_block < 4 * 60 * 1000:
-    return blockchain[-1]['last_difficulty'] + 1
-  elif time_block > 6 * 60 * 1000:
-    return blockchain[-1]['last_difficulty'] - 1
-  return blockchain[-1]['last_difficulty']
+def calculate_difficulty(last_block, timestamp):
+  print(last_block)
+  if last_block['last_timestamp'] != "GENESIS":
+    time_block = timestamp - last_block['last_timestamp']
+    if time_block < 4 * 60 * 1000:
+      return last_block['last_difficulty'] + 1
+    elif time_block > 6 * 60 * 1000:
+      if last_block['last_difficulty'] - 1 < 4:
+        return 4
+      else:
+        return last_block['last_difficulty'] - 1
+    return last_block['last_difficulty']
+  else:
+    return 4
+
+  
+def clear_open_transactions():
+  db = connect_to_db_blockchain()
+  db.find_one_and_update({
+    "_id": ObjectId("5cc8e412fb6fc00ed59ea3bb")
+    }, {
+    '$set': {
+      'open_transactions': []
+    }
+  })
+  return
+
+
