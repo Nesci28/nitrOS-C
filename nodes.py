@@ -36,10 +36,15 @@ class Nodes:
             'nodes': node
           }
         })
-        print('Node {} removed'.format(node))
-        Nodes()
+        message = {
+          "message": 'Node {} removed'.format(node),
+          "code": 201
+        }
       else:
-        print('Wrong password')
-
+        message = {
+          "message": 'Wrong password',
+          "code": 401
+        }
+    return message
 
 # Nodes().remove_node('markgagnon', 'root')

@@ -12,25 +12,28 @@ This social media network website and cryptocurrency has two main reasons to exi
 ### blockchain
 - [X] genesis block
 - [X] add a block
-- [ ] remove a block
-- [ ] verify each block
+- [X] remove a block
 
 ### block
-- [ ] validate transation
-- [X] add transactions
+- [X] validate all the transactions of the block
+  - [X] send the funds to the confirmed transactions
+  - [X] delete the non-confirmed transactions from the block
+- [X] add transactions to the block
 - [X] mine a block
   - [X] add the block to the blockchain
   - [X] continue mining a new block
 
 ### transaction
+- [X] use the keys instead of the login//password
 - [X] transaction between 2 people
   - [X] debit the amount from the sender
-  - [ ] give the amount to the receiver once the block has been mined
+  - [X] give the amount to the receiver once the block has been mined
   - [X] confirm the transaction in case a block has been mined at the very same time
 - [X] transaction once a block has been mined
   - [X] 50% to the founder
   - [X] 50% divided to the other miners
-  - [ ] transfer the fonds to the wallets
+  - [X] transfer the fonds to the wallets
+- [X] sign the transaction
 
 ### wallet
 - [X] create a wallet
@@ -61,6 +64,7 @@ This social media network website and cryptocurrency has two main reasons to exi
     - [X] if the difference is more than 6 minutes, decrease the difficulty
 - [X] do the work
 - [X] randomize the salt in the proof-of-work
+- [ ] announce when a block as been mined
 
 #### get_info
 - [X] get the user balance
@@ -87,10 +91,12 @@ This social media network website and cryptocurrency has two main reasons to exi
 
 #
 # :robot: blockchain backend
-- [ ] login
-- [ ] get the blockchain
-- [ ] mine
-- [ ] transactions
+- [X] login
+- [X] take out the automatic sign in from the login
+- [X] get the blockchain
+- [X] mine
+- [X] transactions
+- [ ] get my list of transactions
 
 #
 # :robot: Nitro backend
@@ -107,6 +113,7 @@ This social media network website and cryptocurrency has two main reasons to exi
 #
 # Bugs
 - [ ] difficulty is being calculated everytime /mine is getting hit.  So, the difficulty can get inacurate if a miner has been mining for 6 minutes without finding a block and another miner join in, his difficulty will be lower than the current miner.
+- [ ] 2 blocks could be sent to the DB at the very same time, that would double all the transactions
 
 #
 # Example of a block

@@ -1,8 +1,11 @@
 from Crypto.PublicKey import RSA
+from Crypto.Signature import PKCS1_v1_5
+from Crypto.Hash import SHA256
 import Crypto.Random
 import binascii
 import bcrypt
 import base64
+import time
 
 
 def password_compare(account_password, db_password):
@@ -49,3 +52,23 @@ def create_keys(account_password):
   public_key = encode(account_password, public_key)
   private_key = encode(account_password, private_key)
   return {"public_key": public_key, "private_key": private_key}
+
+
+def tx_signature(sender, private_key, receiver, amount):
+  signer = PKCS1_v1_5.new(RSA.importKey(binascii.unhexlify(private_key)))
+  h = SHA256.new((str(sender) + str(receiver) + str(amount)).encode('utf8'))
+  signature = signer.sign(h)
+  return binascii.hexlify(signature).decode('ascii')
+
+
+def ver_signature(transaction):
+  if transaction['sender'] == "MINING":
+    return True
+  sender = transaction['sender']
+  receiver = transaction['receiver']
+  signature = transaction['signature']
+  amount = transaction['amount']
+  public_key = RSA.importKey(binascii.unhexlify(sender))
+  verifier = PKCS1_v1_5.new(public_key)
+  h = SHA256.new((str(sender) + str(receiver) + str(amount)).encode('utf8'))
+  return verifier.verify(h, binascii.unhexlify(signature))

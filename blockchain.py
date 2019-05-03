@@ -2,6 +2,7 @@ from bson import ObjectId
 import time
 
 from helpers.db import connect_to_db_blockchain, connect_to_db_accounts
+from helpers.get_info import get_blockchain
 
 class Blockchain:
   def __init__(self):
@@ -44,6 +45,15 @@ class Blockchain:
     return block
 
 
+  @staticmethod
+  def show_blockchain():
+    blockchain = get_blockchain()
+    return {
+      "message": str(blockchain).replace("'", '"').replace('ObjectId(', '').replace(')', ''),
+      "code": 200
+    }
+
+
   def hack_blockchain(self):
     self.db.find_one_and_update({
       "_id": ObjectId("5cc8ec4efb6fc00ed59ea5fd")
@@ -77,9 +87,7 @@ class Blockchain:
     print('nodes deleted')
 
 
-if __name__ == "__main__":
-  Blockchain().hack_transactions()
-  Blockchain().hack_nodes()
-  Blockchain().hack_blockchain()
-
-
+# if __name__ == "__main__":
+#   Blockchain().hack_transactions()
+#   Blockchain().hack_nodes()
+#   Blockchain().hack_blockchain()

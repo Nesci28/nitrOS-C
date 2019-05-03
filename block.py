@@ -5,9 +5,10 @@ import random
 import transactions
 import blockchain
 import nodes
-from helpers.mining import proof, calculate_difficulty
+from wallet import Wallet
+from helpers.mining import proof, calculate_difficulty, clear_open_transactions
 from helpers.get_info import get_balance, get_transactions, get_last_block, get_nodes
-from helpers.mining import clear_open_transactions
+from helpers.db import connect_to_db_accounts
 
 MINING_REWARD = 100
 
@@ -39,6 +40,7 @@ class Block():
         "previous_hash": last_block['hash']
       }
       self.blk.add_block(block)
+      self.transfer_funds(transactions)
       nodes = get_nodes()
       mining_transactions = [{"sender": "MINING", "receiver": current_wallet, "amount": MINING_REWARD / 2}]
       individual_reward = (MINING_REWARD / 2) / len(nodes)
@@ -57,9 +59,27 @@ class Block():
       "pof": pof['proof']
     }
 
+  
+  def transfer_funds(self, transactions):
+    if len(transactions) > 0:
+      db = connect_to_db_accounts()
+      for el in transactions:
+        if Wallet.verify_transaction(el):
+          db.find_one_and_update({
+            "username": el['receiver']
+          }, { 
+            '$inc': {
+              "balance": el['amount']
+            }
+          })
+          print('{} received {}'.format(el['receiver'], el['amount']))
+        else:
+          print('Transaction {} is invalid'.format(el))
+          self.tx.remove_transaction(el)
+
 
 # print(Block().tx.add_transaction('MINING', 'markgagnon', 100))
-Block().mine('markgagnon')
+# Block().mine('markgagnon')
 # print(get_transactions())
 # clear_open_transactions()
 # print(get_last_block())
